@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using WebApi.Data;
 
 namespace WebApi.Controllers
 {
@@ -11,29 +13,18 @@ namespace WebApi.Controllers
 	[Route("[controller]")]
 	public class WeatherForecastController : ControllerBase
 	{
-		private static readonly string[] Summaries = new[]
+		private AppDbContext dbContext;
+		public WeatherForecastController(AppDbContext dbContext)
 		{
-			"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-		};
+			this.dbContext = dbContext;
 
-		private readonly ILogger<WeatherForecastController> _logger;
-
-		public WeatherForecastController(ILogger<WeatherForecastController> logger)
-		{
-			_logger = logger;
 		}
 
 		[HttpGet]
-		public IEnumerable<WeatherForecast> Get()
+		public IActionResult Get()
 		{
-			var rng = new Random();
-			return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-			{
-				Date = DateTime.Now.AddDays(index),
-				TemperatureC = rng.Next(-20, 55),
-				Summary = Summaries[rng.Next(Summaries.Length)]
-			})
-			.ToArray();
+			var folders = dbContext.Folders.Where(c => c.FolderType == 0).Include(a=>a.Children).Where(a=>a.ParentId == 1 && a.UserId == 3);
+			return Ok(folders);
 		}
 	}
 }
