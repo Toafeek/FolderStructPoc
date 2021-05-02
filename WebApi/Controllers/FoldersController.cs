@@ -13,7 +13,7 @@ namespace WebApi.Controllers
 	[ApiController]
 	public class FoldersController : ControllerBase
 	{
-		private IFolderService service;
+		private readonly IFolderService service;
 		public FoldersController(IFolderService service)
 		{
 			this.service = service;
@@ -31,11 +31,19 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPut("{id}/MoveTo/toId")]
-		public async Task<IActionResult> GetFolders(int toId, int id)
+		public async Task<IActionResult> MoveFolder(int toId, int id)
 		{
 			 await this.service.MoveFolder(toId, id);
 			return Ok();
 		}
+
+		[HttpPut]
+		public async Task<IActionResult> RenameFolder(FolderUpdateDto folderUpdateDto)
+		{
+			await this.service.RenameFolder(folderUpdateDto);
+			return Ok();
+		}
+
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> RemoveFolder(int id)

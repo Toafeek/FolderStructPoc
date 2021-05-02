@@ -21,6 +21,9 @@ namespace WebApi.Data
 			base.OnModelCreating(modelBuilder);
 			modelBuilder.Entity<Folder>()
 				.Property(c => c.FolderType).HasConversion<int>();
+
+			modelBuilder.Entity<Folder>().HasOne(x => x.Parent).WithMany(x => x.Children)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

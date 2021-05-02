@@ -20,6 +20,7 @@ namespace WebApi.Models
 		public FolderType FolderType { get; set; }
 
 		public virtual ICollection<Folder> Children { get; set; }
+		public virtual ICollection<FileUpload> FileUploads { get; set; }
 	}
 
 	public enum FolderType

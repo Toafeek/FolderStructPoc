@@ -47,13 +47,22 @@ namespace WebApi.Services
 		public async Task RemoveFolder(int id)
 		{
 			var folder = await this.dbContext.Folders.SingleOrDefaultAsync(f => f.Id == id);
-			if (folder?.Children != null)
+			if (folder != null)
 			{
 			 await	RemoveChildren(folder.Id);
+			 this.dbContext.Folders.Remove(folder);
+			 await this.dbContext.SaveChangesAsync();
 			}
-			else
-			{ 
-				this.dbContext.Remove(folder);
+			
+		}
+
+		public async Task RenameFolder(FolderUpdateDto folderUpdateDto)
+		{
+			if (folderUpdateDto.FolderId != 1 && folderUpdateDto.FolderId != 2)
+			{
+				var folderFromDb = await this.dbContext.Folders.SingleOrDefaultAsync(folder => folder.Id == folderUpdateDto.FolderId);
+				folderFromDb.Name = folderUpdateDto.FolderName;
+				this.dbContext.Folders.Update(folderFromDb);
 				await this.dbContext.SaveChangesAsync();
 			}
 		}

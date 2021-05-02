@@ -15,5 +15,7 @@ namespace WebApi.Services
 		public Task MoveFolder(int ToId, int id);
 
 		public Task RemoveFolder(int id);
+
+		public Task RenameFolder(FolderUpdateDto folderUpdateDto);
 	}
 }

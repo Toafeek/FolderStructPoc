@@ -2,41 +2,42 @@
 
 namespace WebApi.Migrations
 {
-    public partial class init : Migration
+    public partial class fileupload : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Folders",
+                name: "FileUpload",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    FolderId = table.Column<int>(type: "int", nullable: false),
+                    FolderType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Folders", x => x.Id);
+                    table.PrimaryKey("PK_FileUpload", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Folders_Folders_ParentId",
-                        column: x => x.ParentId,
+                        name: "FK_FileUpload_Folders_FolderId",
+                        column: x => x.FolderId,
                         principalTable: "Folders",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Folders_ParentId",
-                table: "Folders",
-                column: "ParentId");
+                name: "IX_FileUpload_FolderId",
+                table: "FileUpload",
+                column: "FolderId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Folders");
+                name: "FileUpload");
         }
     }
 }

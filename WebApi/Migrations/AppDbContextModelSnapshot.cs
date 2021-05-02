@@ -18,6 +18,32 @@ namespace WebApi.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("WebApi.Models.FileUpload", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FolderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FolderType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FolderId");
+
+                    b.ToTable("FileUpload");
+                });
+
             modelBuilder.Entity("WebApi.Models.Folder", b =>
                 {
                     b.Property<int>("Id")
@@ -44,12 +70,23 @@ namespace WebApi.Migrations
                     b.ToTable("Folders");
                 });
 
+            modelBuilder.Entity("WebApi.Models.FileUpload", b =>
+                {
+                    b.HasOne("WebApi.Models.Folder", "Folder")
+                        .WithMany("FileUploads")
+                        .HasForeignKey("FolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Folder");
+                });
+
             modelBuilder.Entity("WebApi.Models.Folder", b =>
                 {
                     b.HasOne("WebApi.Models.Folder", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Parent");
@@ -58,6 +95,8 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Models.Folder", b =>
                 {
                     b.Navigation("Children");
+
+                    b.Navigation("FileUploads");
                 });
 #pragma warning restore 612, 618
         }
