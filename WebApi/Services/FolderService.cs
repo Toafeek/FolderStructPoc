@@ -32,7 +32,7 @@ namespace WebApi.Services
 
 		public async Task<FolderItems> GetSubfolders(int parentId)
 		{
-			var folder = await dbContext.Folders.Include(a=>a.Children).Include(a=>a.FileUploads).FirstOrDefaultAsync(a=>a.Id == parentId);
+			var folder = await dbContext.Folders.Include(a=>a.Children).Include(a=>a.FileUploads).FirstOrDefaultAsync(a=>a.Id == parentId && a.UserId == 3);
 			return new FolderItems
 			{
 				FileUploads = this.mapper.Map<List<FileUploadListItem>>(folder.FileUploads),
