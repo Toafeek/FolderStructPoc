@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
 using WebApi.Services;
+using WebApi.Models;
 
 namespace WebApi
 {
@@ -30,9 +31,11 @@ namespace WebApi
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddAutoMapper(typeof(Startup));
-			services.AddControllers();
+			services.AddControllers().AddNewtonsoftJson(options =>
+				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 			services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("AppEntities")));
 			services.AddScoped<IFolderService, FolderService>();
+			services.AddScoped<IFileUploadService, FileUploadService>();
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });

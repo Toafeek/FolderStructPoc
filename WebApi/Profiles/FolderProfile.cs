@@ -14,6 +14,7 @@ namespace WebApi.Profiles
 		{
 			CreateMap<FolderCreationDto, Folder>().ReverseMap();
 			CreateMap<Folder, FolderListItemDto>().ReverseMap();
+			CreateMap<FileUploadListItem, FileUpload>().ReverseMap();
 		}
 	}
 }

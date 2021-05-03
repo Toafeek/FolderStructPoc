@@ -15,6 +15,7 @@ namespace WebApi.Data
 		}
 
 		public DbSet<Folder> Folders { get; set; }
+		public DbSet<FileUpload> FileUploads { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Dtos;
+using WebApi.Models;
 
 namespace WebApi.Services
 {
@@ -10,7 +11,7 @@ namespace WebApi.Services
 	{
 		public Task<int> CreateFolder(FolderCreationDto folderCreationDto);
 
-		public Task<IEnumerable<FolderListItemDto>> GetSubfolders(int parentId);
+		public Task<FolderItems> GetSubfolders(int parentId);
 
 		public Task MoveFolder(int ToId, int id);
 

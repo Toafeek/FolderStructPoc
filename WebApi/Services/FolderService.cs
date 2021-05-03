@@ -27,13 +27,17 @@ namespace WebApi.Services
 			var folder = this.mapper.Map<Folder>(folderCreationDto);
 			await this.dbContext.Folders.AddAsync(folder);
 			await this.dbContext.SaveChangesAsync();
-			return await Task.FromResult(folder.Id);
+			return folder.Id;
 		}
 
-		public async Task<IEnumerable<FolderListItemDto>> GetSubfolders(int parentId)
+		public async Task<FolderItems> GetSubfolders(int parentId)
 		{
-			var folder = await  dbContext.Folders.Where(a => a.ParentId == parentId && a.UserId == 3).ToListAsync();
-			return this.mapper.Map<IEnumerable<FolderListItemDto>>(folder);
+			var folder = await dbContext.Folders.Include(a=>a.Children).Include(a=>a.FileUploads).FirstOrDefaultAsync(a=>a.Id == parentId);
+			return new FolderItems
+			{
+				FileUploads = this.mapper.Map<List<FileUploadListItem>>(folder.FileUploads),
+				Children = this.mapper.Map<List<FolderListItemDto>>(folder.Children)
+			};
 		}
 
 		public async Task MoveFolder(int ToId, int id)
